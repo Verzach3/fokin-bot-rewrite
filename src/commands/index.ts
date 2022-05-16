@@ -49,7 +49,7 @@ const commands: Command[] = [
     name: "Help",
     description: "Muestra la ayuda del bot",
     usage: "!help [comando]",
-    aliases: ["!help", "!ayuda", "!ayudar", "!ayudame"],
+    aliases: ["!help", "!ayuda", "!ayudar", "!ayudame", "!comandos"],
     execute(message: BetterMessage, args: string[]) {
       const answer: string[] = [];
       answer.push(`
