@@ -1,16 +1,21 @@
 import { downloadContentFromMessage, proto } from "@adiwajshing/baileys";
 import { readFile, writeFile } from "fs/promises";
+import { JsonDB } from "node-json-db";
 import Socket from "../interfaces/socket";
 
 export default class BetterMessage {
   socket: Socket;
   isGroup: boolean = false;
   betterMessage: this = this;
-  constructor(public message: proto.IWebMessageInfo, socket: Socket) {
+  db: JsonDB = null as any;
+  constructor(public message: proto.IWebMessageInfo, socket: Socket, db: JsonDB) {
     this.message = message;
     this.socket = socket;
     if (this.message?.key.remoteJid?.endsWith("@g.us")) {
       this.isGroup = true;
+    }
+    if (db) {
+      this.db = db
     }
   }
 
@@ -262,7 +267,7 @@ export default class BetterMessage {
       await this.sendText(to, "Error al enviar el audio");
       return;
     }
-    await this.socket.sendMessage(this.getChatSender()!, { audio: audioFile });
+    await this.socket.sendMessage(this.getChatSender()!, { audio: audioFile, mimetype: "audio/mp4",});
   }
 
   async replyAudio(audioPath: string) {

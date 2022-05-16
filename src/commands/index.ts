@@ -99,6 +99,21 @@ const commands: Command[] = [
       message.reply("*[Desarrollador]*\n_Verzach3_\n+573135408570");
     },
   },
+  {
+    name: "Ban",
+    description: "Banear a un usuario",
+    usage: "!ban [usuario]",
+    aliases: ["!ban", "!banear"],
+    async execute(message: BetterMessage, args: string[]) {
+      if (!(await message.isSenderAdmin())) {
+        message.reply("No tienes permisos para banear a un usuario");
+        return;
+      }
+      message.banMentionedUsers();
+      message.banUser(message.message.message?.extendedTextMessage?.contextInfo?.participant!);
+      message.reply("Baneado!");
+    }
+  }
 ];
 
 export default commands;

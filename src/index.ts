@@ -6,9 +6,13 @@ import makeWASocket, {
 import { Boom } from "@hapi/boom";
 import Cron from "croner";
 import { mkdir } from "fs/promises";
+import { JsonDB } from "node-json-db";
+import { Config } from "node-json-db/dist/lib/JsonDBConfig";
 import BetterMessage from "./classes/BetterMessage";
 import mainHandler from "./handlers/mainHandler";
 import Reminder from "./interfaces/reminder";
+
+const db = new JsonDB(new Config("mainDB", true, false, "/"));
 
 const { state, saveState } = useSingleFileAuthState("./auth.json");
 mkdir("./media").catch((e) => {console.log(e)})
@@ -48,7 +52,7 @@ async function startBot() {
     if (message.key.remoteJid! === "status@broadcast") {
       return;
     }
-    const m = new BetterMessage(messages[0]!, socket);
+    const m = new BetterMessage(messages[0]!, socket, db);
     if (m.checkCommand("!getMentioned")) {
       m.reply(JSON.stringify(m.getMentionedUsers()));
     }
