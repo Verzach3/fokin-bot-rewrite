@@ -39,7 +39,8 @@
   },
   "nodemonConfig": {
     "ignore": [
-      "auth.json"
+      "auth.json",
+      "mainDB.json"
     ]
   }
 }

@@ -8,17 +8,20 @@ export default class BetterMessage {
   isGroup: boolean = false;
   betterMessage: this = this;
   db: JsonDB = null as any;
-  constructor(public message: proto.IWebMessageInfo, socket: Socket, db: JsonDB) {
+  constructor(
+    public message: proto.IWebMessageInfo,
+    socket: Socket,
+    db: JsonDB
+  ) {
     this.message = message;
     this.socket = socket;
     if (this.message?.key.remoteJid?.endsWith("@g.us")) {
       this.isGroup = true;
     }
     if (db) {
-      this.db = db
+      this.db = db;
     }
   }
-
 
   getChatSender() {
     return this.message.key.remoteJid;
@@ -44,7 +47,7 @@ export default class BetterMessage {
   }
 
   async downloadAttachment(path: string, extension: string) {
-    const mediaType = this.getType()!
+    const mediaType = this.getType()!;
     let stream = null;
     let buffer = Buffer.from([]);
     if (mediaType === "imageMessage") {
@@ -79,22 +82,30 @@ export default class BetterMessage {
       }
     }
     if (mediaType === "extendedTextMessage") {
-      if (this.message.message?.extendedTextMessage?.contextInfo?.quotedMessage?.imageMessage!) {
+      if (
+        this.message.message?.extendedTextMessage?.contextInfo?.quotedMessage
+          ?.imageMessage!
+      ) {
         stream = await downloadContentFromMessage(
-          this.message.message.extendedTextMessage.contextInfo.quotedMessage.imageMessage! as any,
+          this.message.message.extendedTextMessage.contextInfo.quotedMessage
+            .imageMessage! as any,
           "image"
         );
       }
-      if (this.message.message?.extendedTextMessage?.contextInfo?.quotedMessage?.videoMessage!) {
+      if (
+        this.message.message?.extendedTextMessage?.contextInfo?.quotedMessage
+          ?.videoMessage!
+      ) {
         stream = await downloadContentFromMessage(
-          this.message.message.extendedTextMessage.contextInfo.quotedMessage.videoMessage! as any,
+          this.message.message.extendedTextMessage.contextInfo.quotedMessage
+            .videoMessage! as any,
           "video"
         );
       }
     }
 
     if (stream === null) {
-      console.log("[ERROR - ATACHMENT - STREAM IS NULL]")
+      console.log("[ERROR - ATACHMENT - STREAM IS NULL]");
       return;
     }
     for await (const chunk of stream) {
@@ -178,13 +189,16 @@ export default class BetterMessage {
   async isAdmin(id: string) {
     const groupMetadata = await this.getGroupMetadata();
     if (groupMetadata !== null) {
-      let admin = false
+      let admin = false;
       groupMetadata.participants.map((participant) => {
-        if (participant.id === id && (participant.admin === "admin" || participant.admin === "superadmin")) {
+        if (
+          participant.id === id &&
+          (participant.admin === "admin" || participant.admin === "superadmin")
+        ) {
           admin = true;
         }
-      })
-      return admin
+      });
+      return admin;
     }
   }
 
@@ -192,11 +206,9 @@ export default class BetterMessage {
     return this.isAdmin(this.getRealSender()!);
   }
 
-  async makeAdmin(to: string) {
+  async makeAdmin(to: string) {}
 
-  }
-
-  getSenderPushName(){
+  getSenderPushName() {
     let name = "No Name";
     const pushName = this.message.pushName!;
     if (pushName) {
@@ -267,7 +279,10 @@ export default class BetterMessage {
       await this.sendText(to, "Error al enviar el audio");
       return;
     }
-    await this.socket.sendMessage(this.getChatSender()!, { audio: audioFile, mimetype: "audio/mp4",});
+    await this.socket.sendMessage(this.getChatSender()!, {
+      audio: audioFile,
+      mimetype: "audio/mp4",
+    });
   }
 
   async replyAudio(audioPath: string) {
@@ -291,13 +306,45 @@ export default class BetterMessage {
     this.sendSticker(this.getChatSender()!, stickerPath);
   }
 
-  async banMentionedUsers(){
-    if (!(await this.isSenderAdmin())) return 
-    await this.socket.groupParticipantsUpdate(this.getChatSender()!, [... this.getMentionedUsers()], "remove")
+  async banMentionedUsers() {
+    if (!(await this.isSenderAdmin())) return;
+    await this.socket.groupParticipantsUpdate(
+      this.getChatSender()!,
+      [...this.getMentionedUsers()],
+      "remove"
+    );
   }
 
-  async banUser(user: string){
-    if (!(await this.isSenderAdmin())) return
-    await this.socket.groupParticipantsUpdate(this.getChatSender()!, [user], "remove")
+  async banUser(user: string) {
+    if (!(await this.isSenderAdmin())) return;
+    await this.socket.groupParticipantsUpdate(
+      this.getChatSender()!,
+      [user],
+      "remove"
+    );
+  }
+
+  async warnUser(user: string) {
+    if (!(await this.isSenderAdmin())) return;
+    if (!this.isGroup) return;
+    let warns = null
+    try {
+      warns = this.db.getData(`/warns/${this.getChatSender()}/${user}`);
+    } catch (error) {
+      console.log("Key not found");
+    }
+
+    if (warns === null) {
+      this.db.push(`/warns/${this.getChatSender()}/${user}`, 1);
+    }else if(warns === 3) {
+      this.banUser(user);
+      this.db.push(`/warns/${this.getChatSender()}/${user}`, 0);
+    }
+     else {
+      this.db.push(`/warns/${this.getChatSender()}/${user}`, warns + 1);
+    }
+
+    return warns === null ? 1 : warns + 1;
+
   }
 }

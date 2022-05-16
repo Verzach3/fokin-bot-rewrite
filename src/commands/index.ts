@@ -105,6 +105,10 @@ const commands: Command[] = [
     usage: "!ban [usuario]",
     aliases: ["!ban", "!banear"],
     async execute(message: BetterMessage, args: string[]) {
+      if (!message.isGroup){
+        message.reply("No puedes banear a un usuario en un mensaje privado");
+        return;
+      }
       if (!(await message.isSenderAdmin())) {
         message.reply("No tienes permisos para banear a un usuario");
         return;
@@ -113,7 +117,29 @@ const commands: Command[] = [
       message.banUser(message.message.message?.extendedTextMessage?.contextInfo?.participant!);
       message.reply("Baneado!");
     }
-  }
+  },
+  {
+    name: "Warn",
+    description: "Advertir a un usuario",
+    usage: "!warn [usuario]",
+    aliases: ["!warn", "!advertir"],
+    async execute(message: BetterMessage, args: string[]) {
+      if (!message.isGroup){
+        message.reply("No puedes advertir a un usuario en un mensaje privado");
+        return;
+      }
+      if (!(await message.isSenderAdmin())) {
+        message.reply("No tienes permisos para advertir a un usuario");
+        return;
+      }
+      const warns = await message.warnUser(message.message.message?.extendedTextMessage?.contextInfo?.participant!);
+      if (warns < 3){
+        message.reply(`Advertido ${warns}/3 veces`);
+      } else {
+        message.reply("Baneado!");
+      }
+    }
+  },
 ];
 
 export default commands;
