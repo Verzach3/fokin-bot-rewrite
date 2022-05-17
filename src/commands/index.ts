@@ -151,8 +151,7 @@ const commands: Command[] = [
     async execute(message: BetterMessage, args: string[]) {
       message.reply(
         JSON.stringify(
-          message.message.message?.extendedTextMessage?.contextInfo
-            ?.quotedMessage!
+          message.message.message?.extendedTextMessage!
         )
       );
     },
