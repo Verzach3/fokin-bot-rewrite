@@ -323,28 +323,4 @@ export default class BetterMessage {
       "remove"
     );
   }
-
-  async warnUser(user: string) {
-    if (!(await this.isSenderAdmin())) return;
-    if (!this.isGroup) return;
-    let warns = null
-    try {
-      warns = this.db.getData(`/warns/${this.getChatSender()}/${user}`);
-    } catch (error) {
-      console.log("Key not found");
-    }
-
-    if (warns === null) {
-      this.db.push(`/warns/${this.getChatSender()}/${user}`, 1);
-    }else if(warns === 3) {
-      this.banUser(user);
-      this.db.push(`/warns/${this.getChatSender()}/${user}`, 0);
-    }
-     else {
-      this.db.push(`/warns/${this.getChatSender()}/${user}`, warns + 1);
-    }
-
-    return warns === null ? 1 : warns + 1;
-
-  }
 }

@@ -56,10 +56,16 @@ const commands: Command[] = [
 ╭──┈ ➤ ✎ 【﻿ＭＥＮＵ】
 `);
       commands.forEach((command) => {
-        if (args.length === 0) {
-          answer.push(` ➤ **${command.name}**: ${command.description}\n *Uso*: ${command.usage}`);
+        if (args.length === 0 && command.debug !== true) {
+          answer.push(
+            ` ➤ **${command.name}**: ${command.description}\n *Uso*: ${command.usage}`
+          );
         } else if (args[0] === command.name || args[0] === command.aliases[0]) {
-          answer.push(` ➤ **${command.name}**: ${command.description}\n *Uso*: ${command.usage}\n *Alias*: ${command.aliases.join(" | ")}`);
+          answer.push(
+            ` ➤ **${command.name}**: ${command.description}\n *Uso*: ${
+              command.usage
+            }\n *Alias*: ${command.aliases.join(" | ")}`
+          );
         }
       });
       answer.push(`
@@ -105,7 +111,7 @@ const commands: Command[] = [
     usage: "!ban [usuario]",
     aliases: ["!ban", "!banear"],
     async execute(message: BetterMessage, args: string[]) {
-      if (!message.isGroup){
+      if (!message.isGroup) {
         message.reply("No puedes banear a un usuario en un mensaje privado");
         return;
       }
@@ -113,10 +119,12 @@ const commands: Command[] = [
         message.reply("No tienes permisos para banear a un usuario");
         return;
       }
-      message.banMentionedUsers();
-      message.banUser(message.message.message?.extendedTextMessage?.contextInfo?.participant!);
-      message.reply("Baneado!");
-    }
+      await message.banMentionedUsers();
+      await message.banUser(
+        message.message.message?.extendedTextMessage?.contextInfo?.participant!
+      );
+      await message.reply("Baneado!");
+    },
   },
   {
     name: "Warn",
@@ -124,7 +132,7 @@ const commands: Command[] = [
     usage: "!warn [usuario]",
     aliases: ["!warn", "!advertir"],
     async execute(message: BetterMessage, args: string[]) {
-      if (!message.isGroup){
+      if (!message.isGroup) {
         message.reply("No puedes advertir a un usuario en un mensaje privado");
         return;
       }
@@ -132,13 +140,23 @@ const commands: Command[] = [
         message.reply("No tienes permisos para advertir a un usuario");
         return;
       }
-      const warns = await message.warnUser(message.message.message?.extendedTextMessage?.contextInfo?.participant!);
-      if (warns < 3){
-        message.reply(`Advertido ${warns}/3 veces`);
-      } else {
-        message.reply("Baneado!");
-      }
-    }
+      message.reply("Deshabilitado temporalmente");
+    },
+  },
+  {
+    name: "Get Quoted",
+    description: "Obtiene un mensaje citado",
+    usage: "!getquoted",
+    aliases: ["!getquoted", "!quote", "!cita"],
+    async execute(message: BetterMessage, args: string[]) {
+      message.reply(
+        JSON.stringify(
+          message.message.message?.extendedTextMessage?.contextInfo
+            ?.quotedMessage!
+        )
+      );
+    },
+    debug: true,
   },
 ];
 

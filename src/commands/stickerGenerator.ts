@@ -25,7 +25,12 @@ export default async function stickerGenerator(
       extension = ".jpeg";
     } else if (m.message.message?.videoMessage?.contextInfo?.quotedMessage?.videoMessage!) {
       extension = ".mp4";
-    } else {
+    } else if (m.message.message?.imageMessage!){
+      extension = ".jpeg";
+    } else if (m.message.message?.videoMessage!){
+      extension = ".mp4";
+    }
+    {
       m.reply("No enviaste o mencionaste ninguna Imagen/Video");
       return;
     }

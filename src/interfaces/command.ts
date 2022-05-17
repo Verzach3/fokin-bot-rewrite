@@ -6,4 +6,5 @@ export default interface Command {
   usage: string;
   aliases: string[];
   execute(message: BetterMessage, args: string[]): void;
+  debug? : boolean;
 }
