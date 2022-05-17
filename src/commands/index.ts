@@ -158,6 +158,20 @@ const commands: Command[] = [
     },
     debug: true,
   },
+  {
+    name: "Get message",
+    description: "Obtiene un mensaje",
+    usage: "!getmessage [mensaje]",
+    aliases: ["!getmessage", "!getmsg", "!msg", "!mensaje"],
+    async execute(message: BetterMessage, args: string[]) {
+      message.reply(
+        JSON.stringify(
+          message.message.message!
+        )
+      );
+    },
+    debug: true,
+  }
 ];
 
 export default commands;
