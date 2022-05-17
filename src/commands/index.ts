@@ -96,7 +96,7 @@ const commands: Command[] = [
     usage: "!credits",
     aliases: ["!credits", "!creditos", "!credit"],
     execute(message: BetterMessage, args: string[]) {
-      message.reply("*[Desarrollador]*\n_Verzach3_\n+573135408570");
+      message.reply("*[Desarrollador]*\n_Verzach3_\n");
     },
   },
   {
