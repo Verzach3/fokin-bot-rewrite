@@ -21,20 +21,19 @@ export default async function stickerGenerator(
   const filename = `./media/${nanoid()}`;
   let extension = m.getType() === "imageMessage" ? ".jpeg" : ".mp4";
   if (m.getType() === "extendedTextMessage") {
-    if (m.message.message?.extendedTextMessage?.contextInfo?.quotedMessage?.imageMessage!) {
+    if (
+      m.message.message?.extendedTextMessage?.contextInfo?.quotedMessage
+        ?.imageMessage!
+    ) {
       extension = ".jpeg";
-    } else if (m.message.message?.videoMessage?.contextInfo?.quotedMessage?.videoMessage!) {
+    } else if (
+      m.message.message?.videoMessage?.contextInfo?.quotedMessage?.videoMessage!
+    ) {
       extension = ".mp4";
-    } else if (m.message.message?.imageMessage!){
-      extension = ".jpeg";
-    } else if (m.message.message?.videoMessage!){
-      extension = ".mp4";
-    }
-    {
+    } else {
       m.reply("No enviaste o mencionaste ninguna Imagen/Video");
       return;
     }
-    
   }
 
   await m.downloadAttachment(filename, extension);

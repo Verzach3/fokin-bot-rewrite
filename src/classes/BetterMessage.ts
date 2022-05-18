@@ -56,7 +56,7 @@ export default class BetterMessage {
           this.message.message.imageMessage! as any,
           "image"
         );
-    }
+    } else
     if (mediaType === "videoMessage") {
       if (this.message.message?.videoMessage!) {
         stream = await downloadContentFromMessage(
@@ -64,7 +64,7 @@ export default class BetterMessage {
           "video"
         );
       }
-    }
+    } else
     if (mediaType === "audioMessage") {
       if (this.message.message?.audioMessage!) {
         stream = await downloadContentFromMessage(
@@ -72,7 +72,7 @@ export default class BetterMessage {
           "audio"
         );
       }
-    }
+    } else
     if (mediaType === "documentMessage") {
       if (this.message.message?.documentMessage!) {
         stream = await downloadContentFromMessage(
@@ -80,7 +80,7 @@ export default class BetterMessage {
           "document"
         );
       }
-    }
+    } else
     if (mediaType === "extendedTextMessage") {
       if (
         this.message.message?.extendedTextMessage?.contextInfo?.quotedMessage
@@ -91,7 +91,7 @@ export default class BetterMessage {
             .imageMessage! as any,
           "image"
         );
-      }
+      } else
       if (
         this.message.message?.extendedTextMessage?.contextInfo?.quotedMessage
           ?.videoMessage!

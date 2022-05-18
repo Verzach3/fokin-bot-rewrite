@@ -11,5 +11,7 @@ export default function mainHandler(m: BetterMessage): void {
       }
     }
   }
-  console.log("[COMMAND NOT FOUND]")
+  if (m.isCommand()) {
+    console.log("[COMMAND NOT FOUND]")
+  }
 }
