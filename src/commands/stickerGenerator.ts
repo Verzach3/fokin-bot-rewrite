@@ -30,10 +30,10 @@ export default async function stickerGenerator(
       m.message.message?.videoMessage?.contextInfo?.quotedMessage?.videoMessage!
     ) {
       extension = ".mp4";
-    } else {
-      m.reply("No enviaste o mencionaste ninguna Imagen/Video");
-      return;
     }
+  } else {
+    m.reply("No enviaste o mencionaste ninguna Imagen/Video");
+    return;
   }
 
   await m.downloadAttachment(filename, extension);
