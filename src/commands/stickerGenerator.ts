@@ -1,5 +1,6 @@
 import { proto } from "@adiwajshing/baileys";
 import ff from "fluent-ffmpeg";
+import { statSync } from "fs";
 import { nanoid } from "nanoid";
 import sharp from "sharp";
 import BetterMessage from "../classes/BetterMessage";
@@ -60,5 +61,9 @@ export default async function stickerGenerator(
     .resize({ width: 512, height: 512 })
     .webp({ quality: extension === ".jpeg" ? 100 : 80 })
     .toFile(filename + "-1" + ".webp");
+  if (statSync(filename + "-1" + ".webp").size > 1000) {
+    m.reply("Stiker demasiado grande, intenta con una imagen/video mas pequeña o corto");
+    return;
+  }
   await m.sendSticker(m.getChatSender()!, filename + "-1" + ".webp");
 }

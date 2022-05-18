@@ -170,6 +170,17 @@ const commands: Command[] = [
       );
     },
     debug: true,
+  },
+  {
+    name: "Old dl message",
+    description: "Muestra un mensaje al usar el antiguo comando de descarga",
+    usage: "!dl[audio/video] [audio/video] [url/link]",
+    aliases: ["!dlaudio", "!dlvideo"],
+    async execute(message: BetterMessage, args: string[]) {
+      message.reply(
+        "Este comando ha sido reemplazado por el comando !dl [audio/video] [url/link]"
+      );
+    },
   }
 ];
 
