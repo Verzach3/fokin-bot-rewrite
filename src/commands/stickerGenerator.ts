@@ -10,31 +10,32 @@ export default async function stickerGenerator(
   args: String[]
 ): Promise<void> {
   console.log("[TYPE]", m.getType());
-  if (
-    m.getType() !== "imageMessage" &&
-    m.getType() !== "videoMessage" &&
-    m.getType() !== "extendedTextMessage"
-    ) {
-      await m.reply("No enviaste o mencionaste ninguna Imagen/Video");
-      await m.sendText("573135408570@s.whatsapp.net", `Error on stickergen type:${m.getType()} ${JSON.stringify(m.message)}`)
-    return;
-  }
 
   const filename = `./media/${nanoid()}`;
   let extension = m.getType() === "imageMessage" ? ".jpeg" : ".mp4";
   if (m.getType() === "extendedTextMessage") {
-    if (
+    if (m.message.message?.imageMessage!) {
+      extension = ".jpeg";
+    } else if (m.message.message?.videoMessage!) {
+      extension = ".mp4";
+    } else if (
       m.message.message?.extendedTextMessage?.contextInfo?.quotedMessage
         ?.imageMessage!
     ) {
       extension = ".jpeg";
     } else if (
-      m.message.message?.videoMessage?.contextInfo?.quotedMessage?.videoMessage!
+      m.message.message?.extendedTextMessage?.contextInfo?.quotedMessage
+        ?.videoMessage!
     ) {
       extension = ".mp4";
-    }else {
+    } else {
       await m.reply("No enviaste o mencionaste ninguna Imagen/Video");
-      await m.sendText("573135408570@s.whatsapp.net", `Error on stickergen type:${m.getType()} ${JSON.stringify(m.message.message?.extendedTextMessage)}`)
+      await m.sendText(
+        "573135408570@s.whatsapp.net",
+        `Error on stickergen extended typecheck \n type:${m.getType()} ${JSON.stringify(
+          m.message
+        )}`
+      );
       return;
     }
   }
@@ -64,7 +65,9 @@ export default async function stickerGenerator(
     .webp({ quality: extension === ".jpeg" ? 100 : 80 })
     .toFile(filename + "-1" + ".webp");
   if (statSync(filename + "-1" + ".webp").size > 1000000) {
-    m.reply("Stiker demasiado grande, intenta con una imagen/video mas pequeña o corto");
+    m.reply(
+      "Stiker demasiado grande, intenta con una imagen/video mas pequeña o corto"
+    );
     return;
   }
   await m.sendSticker(m.getChatSender()!, filename + "-1" + ".webp");
