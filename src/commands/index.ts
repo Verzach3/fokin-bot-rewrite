@@ -132,6 +132,8 @@ const commands: Command[] = [
     usage: "!warn [usuario]",
     aliases: ["!warn", "!advertir"],
     async execute(message: BetterMessage, args: string[]) {
+      message.reply("Opcion deshabilitada");
+      return
       if (!message.isGroup) {
         message.reply("No puedes advertir a un usuario en un mensaje privado");
         return;

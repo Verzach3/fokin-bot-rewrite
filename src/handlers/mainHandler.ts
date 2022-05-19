@@ -6,7 +6,7 @@ export default function mainHandler(m: BetterMessage): void {
     for (const alias of command.aliases){
       if (m.checkCommand(alias)){
         command.execute(m, m.parseCommand(m.getText()!, " ").args)
-        console.log(`[EXECUTED ${command.name}]`)
+        console.log(`[EXECUTED ${command.name} MESSAGE TYPE: ${m.getType()}] `)
         return
       }
     }
