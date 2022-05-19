@@ -140,7 +140,19 @@ const commands: Command[] = [
         message.reply("No tienes permisos para advertir a un usuario");
         return;
       }
-      message.reply("Deshabilitado temporalmente");
+      const db = message.db
+      const userWarns = db.getData(`/warns/groups/${message.getChatSender()}/${message.getRealSender()}`) || 0;
+      if (userWarns >= 3) {
+        await message.banMentionedUsers();
+        await message.banUser(
+          message.message.message?.extendedTextMessage?.contextInfo?.participant!
+        );
+        await message.reply("Baneado!");
+        db.push(`/warns/groups/${message.getChatSender()}/${message.getRealSender()}`, 0);
+        return;
+      }
+      await message.reply(`Advertido! ${userWarns + 1}/3 veces`);
+      db.push(`/warns/groups/${message.getChatSender()}/${message.getRealSender()}`, userWarns + 1);
     },
   },
   {
@@ -181,7 +193,8 @@ const commands: Command[] = [
         "Este comando ha sido reemplazado por el comando !dl [audio/video] [url/link]"
       );
     },
-  }
+  },
+
 ];
 
 export default commands;

@@ -31,10 +31,10 @@ export default async function stickerGenerator(
       m.message.message?.videoMessage?.contextInfo?.quotedMessage?.videoMessage!
     ) {
       extension = ".mp4";
+    }else {
+      m.reply("No enviaste o mencionaste ninguna Imagen/Video");
+      return;
     }
-  } else {
-    m.reply("No enviaste o mencionaste ninguna Imagen/Video");
-    return;
   }
 
   await m.downloadAttachment(filename, extension);
@@ -61,7 +61,7 @@ export default async function stickerGenerator(
     .resize({ width: 512, height: 512 })
     .webp({ quality: extension === ".jpeg" ? 100 : 80 })
     .toFile(filename + "-1" + ".webp");
-  if (statSync(filename + "-1" + ".webp").size > 1000) {
+  if (statSync(filename + "-1" + ".webp").size > 1000000) {
     m.reply("Stiker demasiado grande, intenta con una imagen/video mas pequeña o corto");
     return;
   }
