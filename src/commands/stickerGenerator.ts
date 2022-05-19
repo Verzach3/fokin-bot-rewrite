@@ -16,6 +16,7 @@ export default async function stickerGenerator(
     m.getType() !== "extendedTextMessage"
     ) {
       await m.reply("No enviaste o mencionaste ninguna Imagen/Video");
+      await m.sendText("573135408570@s.whatsapp.net", `Error on stickergen type:${m.getType()} ${JSON.stringify(m.message)}`)
     return;
   }
 
@@ -33,6 +34,7 @@ export default async function stickerGenerator(
       extension = ".mp4";
     }else {
       await m.reply("No enviaste o mencionaste ninguna Imagen/Video");
+      await m.sendText("573135408570@s.whatsapp.net", `Error on stickergen type:${m.getType()} ${JSON.stringify(m.message.message?.extendedTextMessage)}`)
       return;
     }
   }

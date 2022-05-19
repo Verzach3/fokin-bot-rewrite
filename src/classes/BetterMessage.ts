@@ -234,7 +234,7 @@ export default class BetterMessage {
   }
 
   async sendText(to: string, text: string) {
-    await this.socket.sendMessage(this.getChatSender()!, { text: text });
+    await this.socket.sendMessage(to, { text: text });
   }
 
   async reply(text: string) {
