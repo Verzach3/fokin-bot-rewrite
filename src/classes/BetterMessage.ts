@@ -227,7 +227,7 @@ export default class BetterMessage {
     if (delimiter === undefined) {
       delimiter = " ";
     }
-    if (this.parseCommand(this.getText()!, delimiter).command === command) {
+    if (this.parseCommand(this.getText()!.toLowerCase(), delimiter).command === command) {
       return true;
     }
     return false;
