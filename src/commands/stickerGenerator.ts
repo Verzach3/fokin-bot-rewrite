@@ -11,33 +11,31 @@ export default async function stickerGenerator(
 ): Promise<void> {
   console.log("[TYPE]", m.getType());
 
+  let extension: string | undefined = undefined;
   const filename = `./media/${nanoid()}`;
-  let extension = m.getType() === "imageMessage" ? ".jpeg" : ".mp4";
-  if (m.getType() === "extendedTextMessage") {
-    if (m.message.message?.imageMessage!) {
-      extension = ".jpeg";
-    } else if (m.message.message?.videoMessage!) {
-      extension = ".mp4";
-    } else if (
-      m.message.message?.extendedTextMessage?.contextInfo?.quotedMessage
-        ?.imageMessage!
-    ) {
-      extension = ".jpeg";
-    } else if (
-      m.message.message?.extendedTextMessage?.contextInfo?.quotedMessage
-        ?.videoMessage!
-    ) {
-      extension = ".mp4";
-    } else {
-      await m.reply("No enviaste o mencionaste ninguna Imagen/Video");
-      await m.sendText(
-        "573135408570@s.whatsapp.net",
-        `Error on stickergen extended typecheck \n type:${m.getType()} ${JSON.stringify(
-          m.message
-        )}`
-      );
-      return;
-    }
+  if (m.message.message?.imageMessage!) {
+    extension = ".jpeg";
+  } else if (m.message.message?.videoMessage!) {
+    extension = ".mp4";
+  } else if (
+    m.message.message?.extendedTextMessage?.contextInfo?.quotedMessage
+      ?.imageMessage!
+  ) {
+    extension = ".jpeg";
+  } else if (
+    m.message.message?.extendedTextMessage?.contextInfo?.quotedMessage
+      ?.videoMessage!
+  ) {
+    extension = ".mp4";
+  } else {
+    await m.reply("No enviaste o mencionaste ninguna Imagen/Video");
+    await m.sendText(
+      "573135408570@s.whatsapp.net",
+      `Error on stickergen extended typecheck \n type:${m.getType()} ${JSON.stringify(
+        m.message
+      )}`
+    );
+    return;
   }
 
   await m.downloadAttachment(filename, extension);
