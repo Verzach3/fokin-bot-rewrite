@@ -18,8 +18,8 @@ const commands: Command[] = [
     description: "Genera stickers con la imagen/video enviada o mencionada",
     usage: "!stick [imagen/video]",
     aliases: ["!stick", "!sticker", "!stk"],
-    execute(message: BetterMessage, args: String[]) {
-      stickerGenerator(message, args);
+    async execute(message: BetterMessage, args: String[]) {
+      await stickerGenerator(message, args);
     },
   },
   {
