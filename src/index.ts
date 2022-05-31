@@ -15,7 +15,9 @@ import Reminder from "./interfaces/reminder";
 const db = new JsonDB(new Config("mainDB", true, false, "/"));
 
 const { state, saveState } = useSingleFileAuthState("./auth.json");
-mkdir("./media").catch((e) => {console.log(e)})
+mkdir("./media").catch((e) => {
+  console.log(e);
+});
 
 async function startBot() {
   const reminders: Reminder[] = [];
@@ -56,15 +58,22 @@ async function startBot() {
     if (m.checkCommand("!getMentioned")) {
       m.reply(JSON.stringify(m.getMentionedUsers()));
     }
-    console.log(`[MESSAGE]`, m.getRealSender(), m.getText());
-    message.key.fromMe ? console.log("[SENT]") : console.log("[RECEIVED]");
-    console.log(message.pushName)
+    console.log(
+      `[MESSAGE]`,
+      m.getRealSender(),
+      m.getText(),
+      message.key.fromMe ? console.log("[SENT]") : console.log("[RECEIVED]")
+    );
+    console.log(message.pushName);
+    if (m.isCommand() === false) {
+      return;
+    }
     mainHandler(m);
   });
 
   socket.ev.on("messages.reaction", ({ reaction, key, operation }) => {
     console.log(`[KEY: ${key.remoteJid}] ${operation} ${reaction}`);
-    console.log(reaction)
+    console.log(reaction);
   });
 }
 
