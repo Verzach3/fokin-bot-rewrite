@@ -52,18 +52,11 @@ async function startBot() {
       return;
     }
     const m = new BetterMessage(messages[0]!, socket, db);
-    if (m.checkCommand("!getMentioned")) {
-      m.reply(JSON.stringify(m.getMentionedUsers()));
-    }
-    console.log(
-      `[MESSAGE]`,
-      m.getRealSender(),
-      m.getText(),
-      message.key.fromMe ? console.log("[SENT]") : console.log("[RECEIVED]")
-    );
-    console.log(message.pushName);
     if (m.isCommand() === false) {
       return;
+    }
+    if (m.checkCommand("!getMentioned")) {
+      m.reply(JSON.stringify(m.getMentionedUsers()));
     }
     mainHandler(m);
   });
