@@ -13,6 +13,7 @@ const commands: Command[] = [
     execute(message: BetterMessage, args?: string[]): void {
       message.reply("pong");
     },
+    debug: true
   },
   // Sticker generator
   {
@@ -169,19 +170,6 @@ const commands: Command[] = [
     aliases: ["!getmessage", "!getmsg", "!msg", "!mensaje"],
     async execute(message: BetterMessage, args: string[]) {
       message.reply(JSON.stringify(message.message.message!));
-    },
-    debug: true,
-  },
-  // Old dl message
-  {
-    name: "Old dl message",
-    description: "Muestra un mensaje al usar el antiguo comando de descarga",
-    usage: "!dl[audio/video] [audio/video] [url/link]",
-    aliases: ["!dlaudio", "!dlvideo"],
-    async execute(message: BetterMessage, args: string[]) {
-      message.reply(
-        "Este comando ha sido reemplazado por el comando !dl [audio/video] [url/link]"
-      );
     },
     debug: true,
   },
