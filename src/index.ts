@@ -1,10 +1,8 @@
 import makeWASocket, {
   DisconnectReason,
-  proto,
   useSingleFileAuthState,
 } from "@adiwajshing/baileys";
 import { Boom } from "@hapi/boom";
-import Cron from "croner";
 import { mkdir } from "fs/promises";
 import { JsonDB } from "node-json-db";
 import { Config } from "node-json-db/dist/lib/JsonDBConfig";
@@ -35,8 +33,7 @@ async function startBot() {
         DisconnectReason.loggedOut;
       console.log(
         "connection closed due to error ",
-        // lastDisconnect!.error,
-        ", reconnecting ",
+        "reconnecting ",
         shouldReconnect
       );
       if (shouldReconnect) {

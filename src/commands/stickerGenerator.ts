@@ -1,4 +1,3 @@
-import { proto } from "@adiwajshing/baileys";
 import ff from "fluent-ffmpeg";
 import { statSync } from "fs";
 import { nanoid } from "nanoid";

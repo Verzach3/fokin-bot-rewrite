@@ -1,10 +1,8 @@
 import { createWriteStream } from "fs";
 import { nanoid } from "nanoid";
-import Innertube from "youtubei.js";
 import ytdl from "ytdl-core";
 import ff from "fluent-ffmpeg";
 import BetterMessage from "../classes/BetterMessage";
-import { proto } from "@adiwajshing/baileys";
 const IT = require("youtubei.js");
 export default async function ytDownloader(m: BetterMessage, arg: string[]) {
   const filename = `./media/${nanoid()}`;
@@ -15,6 +13,12 @@ export default async function ytDownloader(m: BetterMessage, arg: string[]) {
   }
   if (!ytdl.validateURL(arg[1])) {
     m.reply("URL invalida");
+    return;
+  }
+  const videoLength = (await ytdl.getBasicInfo(arg[1])).videoDetails
+      .lengthSeconds;
+  if (parseInt(videoLength) > 900) {
+    m.reply("El video es demasiado largo");
     return;
   }
   const stream = youtube.download(ytdl.getVideoID(arg[1]), {
