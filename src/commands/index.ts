@@ -4,6 +4,7 @@ import stickerGenerator from "./stickerGenerator";
 import Mexp from "math-expression-evaluator";
 import ytDownloader from "./ytDownloader";
 const commands: Command[] = [
+  // Ping
   {
     name: "Ping",
     description: "Pingea el bot",
@@ -13,6 +14,7 @@ const commands: Command[] = [
       message.reply("pong");
     },
   },
+  // Sticker generator
   {
     name: "Sticker Generator",
     description: "Genera stickers con la imagen/video enviada o mencionada",
@@ -22,6 +24,7 @@ const commands: Command[] = [
       await stickerGenerator(message, args);
     },
   },
+  // Random number
   {
     name: "Random Number",
     description: "Genera un numero aleatorio",
@@ -35,6 +38,7 @@ const commands: Command[] = [
       );
     },
   },
+  // Math
   {
     name: "Math Solver",
     description: "Resuelve una operacion matematica",
@@ -74,6 +78,7 @@ const commands: Command[] = [
       message.reply(answer.join("\n\n"));
     },
   },
+  // Download
   {
     name: "Download",
     description: "Descarga un video o cancion de youtube",
@@ -83,6 +88,7 @@ const commands: Command[] = [
       ytDownloader(message, args);
     },
   },
+  // Report
   {
     name: "Report",
     description: "Reporta un problema al desarrollador",
@@ -96,6 +102,7 @@ const commands: Command[] = [
       );
     },
   },
+  // Credits
   {
     name: "Credits",
     description: "Muestra los creditos del bot",
@@ -105,6 +112,7 @@ const commands: Command[] = [
       message.reply("*[Desarrollador]*\n_Verzach3_\n");
     },
   },
+  // Ban
   {
     name: "Ban",
     description: "Banear a un usuario",
@@ -126,47 +134,21 @@ const commands: Command[] = [
       await message.reply("Baneado!");
     },
   },
+  // Warn
   {
     name: "Warn",
     description: "Advertir a un usuario",
     usage: "!warn [usuario]",
     aliases: ["!warn", "!advertir"],
     async execute(message: BetterMessage, args: string[]) {
-      message.reply("Opcion deshabilitada");
-      return;
-      if (!message.isGroup) {
+      if(!message.isGroup){
         message.reply("No puedes advertir a un usuario en un mensaje privado");
         return;
       }
-      if (!(await message.isSenderAdmin())) {
-        message.reply("No tienes permisos para advertir a un usuario");
-        return;
-      }
-      const db = message.db;
-      const userWarns =
-        db.getData(
-          `/warns/groups/${message.getChatSender()}/${message.getRealSender()}`
-        ) || 0;
-      if (userWarns >= 3) {
-        await message.banMentionedUsers();
-        await message.banUser(
-          message.message.message?.extendedTextMessage?.contextInfo
-            ?.participant!
-        );
-        await message.reply("Baneado!");
-        db.push(
-          `/warns/groups/${message.getChatSender()}/${message.getRealSender()}`,
-          0
-        );
-        return;
-      }
-      await message.reply(`Advertido! ${userWarns + 1}/3 veces`);
-      db.push(
-        `/warns/groups/${message.getChatSender()}/${message.getRealSender()}`,
-        userWarns + 1
-      );
+      
     },
   },
+  // Get Quoted
   {
     name: "Get Quoted",
     description: "Obtiene un mensaje citado",
@@ -179,6 +161,7 @@ const commands: Command[] = [
     },
     debug: true,
   },
+  // Get Message
   {
     name: "Get message",
     description: "Obtiene un mensaje",
@@ -189,6 +172,7 @@ const commands: Command[] = [
     },
     debug: true,
   },
+  // Old dl message
   {
     name: "Old dl message",
     description: "Muestra un mensaje al usar el antiguo comando de descarga",
@@ -201,6 +185,7 @@ const commands: Command[] = [
     },
     debug: true,
   },
+  // Sexo :v
   {
     name: "Sexo",
     description:
@@ -208,11 +193,10 @@ const commands: Command[] = [
     usage: "!sexo",
     aliases: ["!sexo"],
     async execute(message: BetterMessage, args: string[]) {
-      if (await message.isSenderAdmin()) {
+      if (message.getRealSender() === "5214443031664@s.whatsapp.net") {
         message.reply("Sexo");
         return;
       }
-      message.reply("No");
     },
   },
 ];
