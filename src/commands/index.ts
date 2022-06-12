@@ -31,7 +31,7 @@ const commands: Command[] = [
     description: "Genera un numero aleatorio",
     usage: "!random [min] [max]",
     aliases: ["!rand", "!rnd", "!random"],
-    execute(message: BetterMessage, args: string[]) {
+    async execute(message: BetterMessage, args: string[]) {
       const min = parseInt(args[0]) || 0;
       const max = parseInt(args[1]) || 100;
       message.reply(
@@ -85,7 +85,7 @@ const commands: Command[] = [
     description: "Descarga un video o cancion de youtube",
     usage: "!dl [audio/video] [url/link]",
     aliases: ["!dl", "!descargar", "!descarga"],
-    execute(message: BetterMessage, args: string[]) {
+    async execute(message: BetterMessage, args: string[]) {
       ytDownloader(message, args);
     },
   },
