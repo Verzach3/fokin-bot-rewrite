@@ -21,10 +21,16 @@ export default async function ytDownloader(m: BetterMessage, arg: string[]) {
     m.reply("El video es demasiado largo");
     return;
   }
-  const stream = youtube.download(ytdl.getVideoID(arg[1]), {
-    quality: "360p",
-    format: "mp4",
-  });
+  let stream;
+  try {
+    stream = youtube.download(ytdl.getVideoID(arg[1]), {
+      quality: "360p",
+      format: "mp4",
+    });
+  } catch (error) {
+    m.reply("Error al descargar el video, esto es un error de YouTube, no del bot");
+    return;
+  }
   stream.pipe(createWriteStream(filename + ".mp4"));
 
   stream.on("start", () => {
