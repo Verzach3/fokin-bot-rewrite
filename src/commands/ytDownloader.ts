@@ -15,8 +15,14 @@ export default async function ytDownloader(m: BetterMessage, arg: string[]) {
     m.reply("URL invalida");
     return;
   }
-  const videoLength = (await ytdl.getBasicInfo(arg[1])).videoDetails
-      .lengthSeconds;
+  let videoLength;
+  try {
+    videoLength = (await ytdl.getBasicInfo(arg[1])).videoDetails
+        .lengthSeconds;
+  } catch (error) {
+    m.reply("Error al obtener la duracion del video, error de Youtube");
+    return;
+  }
   if (parseInt(videoLength) > 900) {
     m.reply("El video es demasiado largo");
     return;

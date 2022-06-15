@@ -15,16 +15,16 @@ const commands: Command[] = [
     },
     debug: true
   },
-  // Sticker generator
-  {
-    name: "Sticker Generator",
-    description: "Genera stickers con la imagen/video enviada o mencionada",
-    usage: "!stick [imagen/video]",
-    aliases: ["!stick", "!sticker", "!stk"],
-    async execute(message: BetterMessage, args: String[]) {
-      await stickerGenerator(message, args);
-    },
-  },
+  // // Sticker generator
+  // {
+  //   name: "Sticker Generator",
+  //   description: "Genera stickers con la imagen/video enviada o mencionada",
+  //   usage: "!stick [imagen/video]",
+  //   aliases: ["!stick", "!sticker", "!stk"],
+  //   async execute(message: BetterMessage, args: String[]) {
+  //     await stickerGenerator(message, args);
+  //   },
+  // },
   // Random number
   {
     name: "Random Number",
@@ -39,70 +39,86 @@ const commands: Command[] = [
       );
     },
   },
-  // Math
+  // Random 2
   {
-    name: "Math Solver",
-    description: "Resuelve una operacion matematica",
-    usage: "!math [operacion]",
-    aliases: ["!math", "!mat", "!solve"],
-    execute(message: BetterMessage, args: string[]) {
-      const result = Mexp.eval(args.join(" "));
-      message.reply(result.toString());
-    },
-  },
-  {
-    name: "Help",
-    description: "Muestra la ayuda del bot",
-    usage: "!help [comando]",
-    aliases: ["!help", "!ayuda", "!ayudar", "!ayudame", "!comandos"],
-    execute(message: BetterMessage, args: string[]) {
-      const answer: string[] = [];
-      answer.push(`
-╭──┈ ➤ ✎ 【﻿ＭＥＮＵ】
-`);
-      commands.forEach((command) => {
-        if (args.length === 0 && command.debug !== true) {
-          answer.push(
-            ` ➤ **${command.name}**: ${command.description}\n *Uso*: ${command.usage}`
-          );
-        } else if (args[0] === command.name || args[0] === command.aliases[0]) {
-          answer.push(
-            ` ➤ **${command.name}**: ${command.description}\n *Uso*: ${
-              command.usage
-            }\n *Alias*: ${command.aliases.join(" | ")}`
-          );
-        }
-      });
-      answer.push(`
-│ Mas en camino!
-╰─────────────❁ཻུ۪۪⸙͎`);
-      message.reply(answer.join("\n\n"));
-    },
-  },
-  // Download
-  {
-    name: "Download",
-    description: "Descarga un video o cancion de youtube",
-    usage: "!dl [audio/video] [url/link]",
-    aliases: ["!dl", "!descargar", "!descarga"],
+    name: "Dice",
+    description: "Genera 2 numeros aleatorios con un mismo rango",
+    usage: "!random [min] [max]",
+    aliases: ["!dice", "!dado", "!random2"],
     async execute(message: BetterMessage, args: string[]) {
-      ytDownloader(message, args);
-    },
-  },
-  // Report
-  {
-    name: "Report",
-    description: "Reporta un problema al desarrollador",
-    usage: "!report [mensaje]",
-    aliases: ["!report", "!reportar"],
-    execute(message: BetterMessage, args: string[]) {
-      message.reply(`Reporte enviado!`);
-      message.sendText(
-        "573135408570@s.whatsapp.net",
-        `Reporte de ${message.getRealSender()!}:\n${args.join(" ")}`
+      const min = parseInt(args[0]) || 0;
+      const max = parseInt(args[1]) || 100;
+      message.reply(`
+      ${Math.floor(Math.random() * (max - min + 1) + min).toString()}
+      ${Math.floor(Math.random() * (max - min + 1) + min).toString()}
+      `
       );
     },
   },
+  // // Math
+  // {
+  //   name: "Math Solver",
+  //   description: "Resuelve una operacion matematica",
+  //   usage: "!math [operacion]",
+  //   aliases: ["!math", "!mat", "!solve"],
+  //   execute(message: BetterMessage, args: string[]) {
+  //     const result = Mexp.eval(args.join(" "));
+  //     message.reply(result.toString());
+  //   },
+  // },
+//   {
+//     name: "Help",
+//     description: "Muestra la ayuda del bot",
+//     usage: "!help [comando]",
+//     aliases: ["!help", "!ayuda", "!ayudar", "!ayudame", "!comandos"],
+//     execute(message: BetterMessage, args: string[]) {
+//       const answer: string[] = [];
+//       answer.push(`
+// ╭──┈ ➤ ✎ 【﻿ＭＥＮＵ】
+// `);
+//       commands.forEach((command) => {
+//         if (args.length === 0 && command.debug !== true) {
+//           answer.push(
+//             ` ➤ **${command.name}**: ${command.description}\n *Uso*: ${command.usage}`
+//           );
+//         } else if (args[0] === command.name || args[0] === command.aliases[0]) {
+//           answer.push(
+//             ` ➤ **${command.name}**: ${command.description}\n *Uso*: ${
+//               command.usage
+//             }\n *Alias*: ${command.aliases.join(" | ")}`
+//           );
+//         }
+//       });
+//       answer.push(`
+// │ Mas en camino!
+// ╰─────────────❁ཻུ۪۪⸙͎`);
+//       message.reply(answer.join("\n\n"));
+//     },
+//   },
+  // // Download
+  // {
+  //   name: "Download",
+  //   description: "Descarga un video o cancion de youtube",
+  //   usage: "!dl [audio/video] [url/link]",
+  //   aliases: ["!dl", "!descargar", "!descarga"],
+  //   async execute(message: BetterMessage, args: string[]) {
+  //     ytDownloader(message, args);
+  //   },
+  // },
+  // // Report
+  // {
+  //   name: "Report",
+  //   description: "Reporta un problema al desarrollador",
+  //   usage: "!report [mensaje]",
+  //   aliases: ["!report", "!reportar"],
+  //   execute(message: BetterMessage, args: string[]) {
+  //     message.reply(`Reporte enviado!`);
+  //     message.sendText(
+  //       "573135408570@s.whatsapp.net",
+  //       `Reporte de ${message.getRealSender()!}:\n${args.join(" ")}`
+  //     );
+  //   },
+  // },
   // Credits
   {
     name: "Credits",
